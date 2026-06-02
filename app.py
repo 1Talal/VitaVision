@@ -19,9 +19,13 @@ st.set_page_config(
     layout="wide"
 )
 
+
 # =========================================
 # Load ML Model + OpenAI
 # =========================================
+
+import os
+
 MODEL_PATH = "models/vitavision_hybrid_model_v1.pkl"
 
 @st.cache_resource
@@ -32,20 +36,31 @@ def load_ml_model():
 
 ml_model = load_ml_model()
 
+# =========================================
+# OpenAI API Configuration
+# =========================================
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
 try:
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 except Exception:
     client = None
-
-OPENAI_MODEL = st.secrets.get("OPENAI_MODEL", "gpt-4o-mini") if client else "gpt-4o-mini"
 
 # =========================================
 # Supabase Auth + Database
 # =========================================
+
 try:
-    SUPABASE_URL = st.secrets["SUPABASE_URL"]
-    SUPABASE_ANON_KEY = st.secrets["SUPABASE_ANON_KEY"]
-    supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+    SUPABASE_URL = os.getenv("SUPABASE_URL")
+    SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+
+    supabase = create_client(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    ) if SUPABASE_URL and SUPABASE_ANON_KEY else None
+
 except Exception:
     supabase = None
 
@@ -64,7 +79,6 @@ if "auth_role" not in st.session_state:
 
 if "auth_email" not in st.session_state:
     st.session_state["auth_email"] = None
-
 # =========================================
 # Disclaimer dialog
 # =========================================
