@@ -1,5 +1,9 @@
 # 🌿 VitaVision — Vitamin & Mineral Health Analyzer
 
+<p align="center">
+  <img src="images/vitavision_preview.png" width="100%">
+</p>
+
 **AI-powered web application for vitamin and mineral lab result analysis**
 تطبيق ذكي لتحليل نتائج الفيتامينات والمعادن بطريقة سهلة وواضحة
 
